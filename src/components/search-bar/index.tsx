@@ -1,5 +1,5 @@
 import "./style.css";
-import { useState, FormEvent, ChangeEvent, useEffect } from "react";
+import React, { useState, FormEvent, ChangeEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../form/button";
 import Input from "../form/input";
@@ -13,6 +13,7 @@ function SearchBar({ searchQuery, isSearching }: SearchBarProps) {
   const [input, setInput] = useState<string>(searchQuery);
   const navigate = useNavigate();
 
+  /* update input if search query already present in url */
   useEffect(() => {
     setInput(searchQuery);
   }, [searchQuery]);
@@ -43,5 +44,5 @@ function SearchBar({ searchQuery, isSearching }: SearchBarProps) {
     </form>
   );
 }
-
-export default SearchBar;
+const MemoizedSearchBar = React.memo(SearchBar);
+export default MemoizedSearchBar;

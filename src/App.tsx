@@ -1,69 +1,48 @@
 import "./App.css";
 import "./index.css";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { fetchWeather } from "./utils";
+import { WeatherData } from "./types";
+import { suggestions } from "./data";
 import SearchBar from "./components/search-bar";
 import WeatherDisplay from "./components/weather-display";
-import { WeatherData } from "./types";
 import Loading from "./components/loading";
 import Card from "./components/card";
 import Error from "./components/error";
 import Logo from "./components/logo";
 import PlaceSuggestion from "./components/place-suggestions";
 
-const suggestions = ["Mandi, Himachal Pradesh", "Chandigarh", "London"];
-
-type ErrorType = string | { message?: string; code?: number } | null;
-
-function errorMessage(error: ErrorType) {
-  let errorMessage = "Something went wrong!";
-
-  if (typeof error === "object" && error !== null && error.message) {
-    errorMessage = error.message;
-  } else if (typeof error === "string") {
-    errorMessage = error;
-  }
-
-  return errorMessage;
-}
-
 function App() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
-  const [error, setError] = useState<ErrorType>(null);
+  const [error, setError] = useState<string | null>(null);
   const location = useLocation();
 
-  const fetchWeather = async (city: string) => {
-    const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
-    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`;
-
+  /* Handling search action, using callback to avoid unnecessary function creation on re rendering */
+  const handleSearchCallback = useCallback(async (city: string) => {
+    setIsSearching(true);
+    setError(null);
+    setWeather(null);
     try {
-      setIsSearching(true);
-      setError(null);
-      setWeather(null);
-      const response = await fetch(url);
-      const data = (await response?.json()) as WeatherData;
-      console.log(data);
-      if (!data?.error) {
-        setWeather(data);
-      } else {
-        setError(data?.error);
-      }
+      const data = await fetchWeather(city);
+      setWeather(data);
     } catch (error) {
-      console.error("Failed to fetch weather", error);
-      setError(error ?? "Something went wrong!");
+      setError((error as Error).message || "Something went wrong!");
     } finally {
       setIsSearching(false);
     }
-  };
+  }, []);
 
+  /* Handling search on changing search query */
   useEffect(() => {
     if (searchQuery) {
-      fetchWeather(searchQuery);
+      handleSearchCallback(searchQuery);
     }
-  }, [searchQuery]);
+  }, [searchQuery, handleSearchCallback]);
 
+  /* Updating search query from url search params */
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const searchQuery = queryParams.get("search");
@@ -81,15 +60,15 @@ function App() {
         </div>
         <SearchBar searchQuery={searchQuery} isSearching={isSearching} />
         {!error && !weather && !isSearching && !searchQuery && (
-          <div>
+          <>
             {suggestions.map((place) => (
               <PlaceSuggestion key={place} text={place} />
             ))}
-          </div>
+          </>
         )}
         <div className="content-container">
           {isSearching && <Loading />}
-          {error && <Error text={errorMessage(error)} />}
+          {error && <Error text={error} />}
           {weather && !isSearching && <WeatherDisplay weather={weather} />}
         </div>
       </Card>

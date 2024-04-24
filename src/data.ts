@@ -1,0 +1,1 @@
+export const suggestions = ["Mandi, Himachal Pradesh", "Chandigarh", "London"];

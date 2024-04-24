@@ -1,4 +1,5 @@
 import "./style.css";
+import React from "react";
 import { WeatherData } from "../../types";
 
 interface WeatherDisplayProps {
@@ -38,4 +39,5 @@ function WeatherDisplay({ weather }: WeatherDisplayProps) {
   );
 }
 
-export default WeatherDisplay;
+const MemoizedWeatherDisplay = React.memo(WeatherDisplay);
+export default MemoizedWeatherDisplay;

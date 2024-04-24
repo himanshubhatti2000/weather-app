@@ -48,3 +48,4 @@ export interface WeatherData {
     message: string;
   }
   
+  export type ErrorType = string | { message?: string; code?: number } | null;
