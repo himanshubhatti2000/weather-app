@@ -1,0 +1,21 @@
+.weather-container {
+    font-size: 16px;
+  }
+  
+.weather-header {
+    font-size: 24px;
+  }
+  
+.weather-detail {
+    margin: 10px 0;
+    color: #939393;
+  }
+  
+.weather-container span{
+    font-weight: 700;
+  }
+
+.weather-ico{
+    width: 100px;
+    height: 100px;
+  }

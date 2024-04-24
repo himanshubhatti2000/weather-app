@@ -1,0 +1,16 @@
+.content-container{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin-top: 12px;
+}
+
+.app-container{
+    min-height: 480px;
+}
+
+@media (max-width: 480px) {
+    .content-container{
+        text-align: unset;
+    }
+}

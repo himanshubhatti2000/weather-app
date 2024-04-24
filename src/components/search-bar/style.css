@@ -1,0 +1,22 @@
+.search-form {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+  }
+
+.search-input{
+    margin-right: 12px;
+  }
+  
+@media (max-width: 480px) {
+    .search-form {
+      flex-direction: column;
+    }
+
+    .search-btn {
+        width: 100%;
+        margin-top: 12px;
+    }
+
+  }
+  

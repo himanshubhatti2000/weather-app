@@ -1,0 +1,10 @@
+.place-suggestion{
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    color: #939393;
+    cursor: pointer;
+}
+.place-suggestion p{
+ text-align: left;
+}
