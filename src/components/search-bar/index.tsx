@@ -18,6 +18,7 @@ function SearchBar({ searchQuery, isSearching }: SearchBarProps) {
     setInput(searchQuery);
   }, [searchQuery]);
 
+  /* handle form submit */
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     navigate(`?search=${encodeURIComponent(input)}`);
