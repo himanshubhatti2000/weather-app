@@ -1,4 +1,8 @@
 export interface WeatherData {
+  error?: {
+    code?: number;
+    message?: string;
+  };
   location: {
     name: string;
     region: string;
@@ -8,6 +12,7 @@ export interface WeatherData {
     tz_id: string;
     localtime_epoch: number;
     localtime: string;
+    
   };
   current: {
     temp_c: number;
